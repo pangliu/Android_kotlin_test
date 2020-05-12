@@ -14,24 +14,23 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import infinitas.com.indochat.kotlindemo.data.UserData
 import android.os.Handler
+import androidx.lifecycle.LifecycleOwner
 import infinitas.com.indochat.kotlindemo.R
 import infinitas.com.indochat.kotlindemo.widget.ProgressDialog
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import org.jetbrains.anko.find
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity(), LifecycleOwner {
 
     companion object {
         val TAG = "msg"
     }
 
-    lateinit var tvMsg: TextView
-    lateinit var etName: EditText
-    lateinit var etPassword: EditText
-    lateinit var btnLogin: Button
-    lateinit var btnShow: Button
+    val tvMsg by lazy { find<TextView>(R.id.tv_message) }
+    val etName by lazy { find<EditText>(R.id.et_name)}
+    val etPassword by lazy { find<EditText>(R.id.et_password) }
+    val btnLogin by lazy { find<Button>(R.id.btn_login) }
+    val btnShow by lazy { find<Button>(R.id.btn_show_text) }
     lateinit var loginViewModel: LoginViewModel
     lateinit var progressDialog: ProgressDialog
 
@@ -60,16 +59,11 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun initViews() {
-        tvMsg = this.findViewById(R.id.tv_message)
-        etName = this.findViewById(R.id.et_name)
-        etPassword = this.findViewById(R.id.et_password)
-        btnShow = this.findViewById(R.id.btn_show_text)
         btnShow.setOnClickListener {
             logd("show click")
             var intent = Intent(this, HomeActivity::class.java)
             startActivity(intent)
         }
-        btnLogin = this.findViewById(R.id.btn_login)
         btnLogin.setOnClickListener {
             logd("login Click")
             var user = UserData(etName.text.toString(), etPassword.text.toString())

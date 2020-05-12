@@ -1,28 +1,41 @@
 package infinitas.com.indochat.kotlindemo.data
 
+import com.google.gson.annotations.SerializedName
+
 data class UserData (val userName:String, val password:String) {
     override fun toString(): String {
         return "$userName - $password"
     }
 }
 
-data class VersionInfo(
-    var version: String = "",
-    var msg: String = "",
-    var lang: String = "",
-    var status: Int
-)
+open class BaseInfo {
+    var msg: String? = ""
+    var lang: String? = ""
+    var status: Int? = 0
+}
 
-data class StationInfo (
-    var id: Int,
-    var name: String,
-    var lockNum: Int,
-    var lockMax: Int,
-    var lat: String,
-    var lon: String)
+data class VersionInfo(
+    @SerializedName("version")
+    val version: String
+): BaseInfo()
+
 
 data class StationArray(
-    var datas: ArrayList<StationInfo>,
-    var status: Int,
-    var msg: String = "",
-    var lang: String = "")
+    @SerializedName("datas")
+    val datas: List<StationInfo>
+): BaseInfo() {
+    data class StationInfo(
+        @SerializedName("id")
+        val id: Int,
+        @SerializedName("name")
+        val name: String,
+        @SerializedName("lock_num")
+        val lock_num: String,
+        @SerializedName("lock_max")
+        val lock_max: String,
+        @SerializedName("lat")
+        val lat: String,
+        @SerializedName("lon")
+        val lon: String
+    )
+}
